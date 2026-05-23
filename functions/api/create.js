@@ -1,17 +1,23 @@
 export async function onRequest(context) {
     const { env, request } = context;
 
-    // Sirf POST requests allow karenge
     if (request.method !== "POST") {
         return new Response("Method Not Allowed", { status: 405 });
     }
 
     try {
         const formData = await request.formData();
-        const username = formData.get("username").trim().toLowerCase().replace(/[^a-z0-9-]/g, ""); // URL safe username
+        const username = formData.get("username").trim().toLowerCase().replace(/[^a-z0-9-]/g, ""); 
         const full_name = formData.get("full_name");
         const profession = formData.get("profession");
         const dob = formData.get("dob");
+        
+        // Naye Fields
+        const country = formData.get("country");
+        const short_bio = formData.get("short_bio");
+        const yt_link = formData.get("yt_link");
+        const blue_tick = formData.get("blue_tick") === "on" ? "true" : "false"; // Toggle check
+        
         const bio_text = formData.get("bio_text");
         const instagram = formData.get("instagram");
         const linkedin = formData.get("linkedin");
@@ -24,13 +30,13 @@ export async function onRequest(context) {
             });
         }
 
-        // Database me data Insert ya Replace (Update) karein
+        // Updated Database Insert Query
         await env.DB.prepare(`
-            INSERT OR REPLACE INTO biographies (username, full_name, profession, dob, bio_text, instagram, linkedin, profile_pic_url)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `).bind(username, full_name, profession, dob, bio_text, instagram, linkedin, profile_pic_url).run();
+            INSERT OR REPLACE INTO biographies 
+            (username, full_name, profession, dob, country, short_bio, bio_text, instagram, linkedin, profile_pic_url, yt_link, blue_tick)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(username, full_name, profession, dob, country, short_bio, bio_text, instagram, linkedin, profile_pic_url, yt_link, blue_tick).run();
 
-        // Success Response bhejein jisme naya URL hoga
         const generatedUrl = `/${username}`;
         return new Response(JSON.stringify({ success: true, url: generatedUrl }), {
             headers: { "Content-Type": "application/json" }
