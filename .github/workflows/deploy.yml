@@ -1,0 +1,25 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main  # Jab bhi aap main branch me push karenge, auto-deploy ho jayega
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }} 
+          accountId: 9e06acc81937563a18a6725a6544d300
+          projectName: 'viralbio' # Yahan apne Cloudflare project ka exact naam likhein
+          directory: '.'
