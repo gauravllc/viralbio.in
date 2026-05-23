@@ -3,7 +3,7 @@ export async function onRequest(context) {
     const username = params.username.toLowerCase();
 
     // ==========================================
-    // 1. ADMIN PANEL ROUTE (With R2 File Upload)
+    // 1. ADMIN PANEL ROUTE (Photo Upload Ke Sath)
     // ==========================================
     if (username === 'admin') {
         const adminHtml = `
@@ -21,9 +21,11 @@ export async function onRequest(context) {
         h2 { margin-bottom: 20px; color: #111; font-size: 24px; text-align: center; font-weight: 700; }
         label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; }
         input, textarea { width: 100%; padding: 12px; margin-bottom: 18px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 15px; background: #f8fafc; transition: 0.2s; }
+        input[type="file"] { background: white; padding: 9px; cursor: pointer; }
         input:focus, textarea:focus { border-color: #3182ce; background: white; outline: none; }
         .btn-submit { width: 100%; padding: 14px; background: #3182ce; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .btn-submit:hover { background: #2b6cb0; }
+        .btn-submit:disabled { background: #a0aec0; cursor: not-allowed; }
         .result-box { display: none; margin-top: 20px; padding: 15px; background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 8px; text-align: center; }
         .result-box a { color: #2f855a; font-weight: 600; text-decoration: underline; word-break: break-all; }
     </style>
@@ -32,7 +34,7 @@ export async function onRequest(context) {
 <div class="admin-card">
     <h2>📝 Create Wikipedia Bio</h2>
     <form id="bioForm">
-        <label>Username (URL ke liye: e.g. rahul)</label>
+        <label>Username (URL ke liye: e.g. rahul-sharma)</label>
         <input type="text" name="username" placeholder="rahul-sharma" required>
         
         <label>Full Name</label>
@@ -44,7 +46,7 @@ export async function onRequest(context) {
         <label>Date of Birth</label>
         <input type="text" name="dob" placeholder="15 August 1995">
         
-        <label>Upload Profile Photo (Direct Computer/Mobile Se)</label>
+        <label>Upload Profile Photo (Direct PC/Mobile se)</label>
         <input type="file" id="imageFile" accept="image/*" required>
         <input type="hidden" name="profile_pic_url" id="profile_pic_url">
         
@@ -57,7 +59,7 @@ export async function onRequest(context) {
         <label>LinkedIn Link (Optional)</label>
         <input type="url" name="linkedin" placeholder="https://linkedin.com/in/username">
         
-        <button type="submit" class="btn-submit" id="submitBtn">Generate Link</button>
+        <button type="submit" class="btn-submit" id="submitBtn">Upload & Generate Link</button>
     </form>
     <div class="result-box" id="resultBox">
         <p style="color: #22543d; margin-bottom: 5px; font-size: 14px;">🎉 Link Successfully Live!</p>
@@ -73,9 +75,9 @@ export async function onRequest(context) {
         const fileInput = document.getElementById('imageFile');
         let finalPhotoUrl = "";
 
-        // 1. Pehle photo ko R2 me upload karenge agar file select hui h to
+        // 1. Photo Upload Logic
         if (fileInput.files.length > 0) {
-            btn.innerText = "Uploading Photo to R2 Storage...";
+            btn.innerText = "Uploading Photo to R2...";
             const fileFormData = new FormData();
             fileFormData.append("file", fileInput.files[0]);
 
@@ -88,18 +90,18 @@ export async function onRequest(context) {
                 } else {
                     alert("Photo upload failed: " + uploadData.error);
                     btn.disabled = false;
-                    btn.innerText = "Generate Link";
+                    btn.innerText = "Upload & Generate Link";
                     return;
                 }
             } catch (err) {
                 alert("Error uploading photo. Check network.");
                 btn.disabled = false;
-                btn.innerText = "Generate Link";
+                btn.innerText = "Upload & Generate Link";
                 return;
             }
         }
 
-        // 2. Ab photo URL milne ke baad main database me data save karenge
+        // 2. Data Save Logic
         btn.innerText = "Saving Profile Data...";
         const formData = new FormData(e.target);
         if (finalPhotoUrl) {
@@ -121,7 +123,7 @@ export async function onRequest(context) {
         } catch (err) {
             alert("Failed to save data to Database.");
         }
-        btn.innerText = "Generate Link";
+        btn.innerText = "Upload & Generate Link";
         btn.disabled = false;
     }
 </script>
