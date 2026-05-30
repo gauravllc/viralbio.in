@@ -86,7 +86,7 @@ export async function onRequest(context) {
             
             /* TYPOGRAPHY & CONTENT */
             h1#firstHeading { font-family: 'Linux Libertine', 'Georgia', 'Times', serif; font-weight: normal; margin: 0 0 0.25em 0; padding-bottom: 0.25em; border-bottom: 1px solid #a2a9b1; font-size: 2.2em; line-height: 1.2; display: flex; align-items: center; }
-            #siteSub { font-size: 0.85em; color: #54595d; margin-bottom: 1.5em; }
+            #siteSub { font-size: 0.85em; color: #0077b5; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 1.5em; }
             p { margin: 0.4em 0 0.5em 0; font-size: 1.05em; color: #202122; }
             .reference { font-size: 80%; line-height: 1; vertical-align: super; }
             
@@ -98,11 +98,11 @@ export async function onRequest(context) {
             .infobox td { vertical-align: top; padding: 4px; }
             
             /* TOC & MEDIA */
-            .toc { background-color: #f8f9fa; border: 1px solid #a2a9b1; padding: 10px 15px; display: inline-block; margin: 1em 0; font-size: 95%; }
+            .toc { background-color: #f8f9fa; border: 1px solid #a2a9b1; padding: 10px 15px; display: inline-block; margin: 1em 0; font-size: 95%; min-width: 250px; }
             .toc h2 { margin: 0 0 5px 0; font-size: 1em; border: none; }
             .toc ul { list-style: none; padding-left: 0; margin: 0; }
             .toc li { margin-bottom: 3px; }
-            .toc .tocnumber { color: #202122; padding-right: 5px; }
+            .toc .tocnumber { color: #202122; padding-right: 5px; font-weight: bold; }
             
             .thumb { margin-bottom: .5em; width: auto; background-color: transparent; border-color: white; }
             .tright { float: right; clear: right; margin: .5em 0 1.3em 1.4em; }
@@ -120,7 +120,9 @@ export async function onRequest(context) {
                 #mw-panel, .mw-portlet-tabs, #mw-page-base, #p-personal { display: none; }
                 #content { margin-left: 0; margin-top: 0; padding: 1em; border: none; }
                 .infobox { float: none; width: 100%; margin: 0 0 1em 0; }
-                .tright { float: none; margin: 1em auto; }
+                .tright { float: none; margin: 1em auto; width: 100%; }
+                .thumbinner { width: 100% !important; }
+                .thumbinner iframe { width: 100%; height: auto; aspect-ratio: 16/9; }
             }
         </style>
     </head>
@@ -155,7 +157,7 @@ export async function onRequest(context) {
         
         <div id="mw-panel">
             <div class="mw-wiki-logo">
-                <span class="mw-wiki-logo-text">WIKIPEDIA<br><span style="font-size:0.5em; font-family:sans-serif; letter-spacing:0;">The Free Encyclopedia</span></span>
+                <span class="mw-wiki-logo-text">WIKIPEDIA<br><span style="font-size:0.5em; font-family:sans-serif; letter-spacing:0; color:#54595d;">The Free Encyclopedia</span></span>
             </div>
             <div class="portal">
                 <ul>
@@ -182,7 +184,7 @@ export async function onRequest(context) {
 
         <div id="content">
             <h1 id="firstHeading">${res.full_name} ${blueTickHtml}</h1>
-            <div id="siteSub">From Wikipedia, the free encyclopedia</div>
+            <div id="siteSub">Verified Public Figure Archive &bull; Global Digital Encyclopedia</div>
             
             <div id="bodyContent">
                 <table class="infobox vcard">
@@ -197,21 +199,52 @@ export async function onRequest(context) {
                     </tbody>
                 </table>
                 
-                <p><b>${res.full_name}</b> is an Indian ${res.profession ? res.profession.toLowerCase() : 'professional'} ${res.country ? `from ${res.country}` : ''}. ${shortBio}</p>
+                <p><b>${res.full_name}</b> is an Indian ${res.profession ? res.profession.toLowerCase() : 'professional'} ${res.country ? `from ${res.country}` : ''}. ${shortBio} Known for a meticulous approach to work and an evolving personal brand, they have become a recognizable figure in their respective domain.</p>
                 
                 <div class="toc">
                     <h2>Contents</h2>
                     <ul>
                         <li><a href="#"><span class="tocnumber">1</span> <span class="toctext">Early life and career</span></a></li>
-                        <li><a href="#"><span class="tocnumber">2</span> <span class="toctext">Public image</span></a></li>
-                        <li><a href="#"><span class="tocnumber">3</span> <span class="toctext">Media</span></a></li>
-                        <li><a href="#"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+                        <li><a href="#"><span class="tocnumber">2</span> <span class="toctext">Public image and influence</span></a></li>
+                        <li><a href="#"><span class="tocnumber">3</span> <span class="toctext">Career milestones</span></a></li>
+                        <li><a href="#"><span class="tocnumber">4</span> <span class="toctext">Legacy and recognition</span></a></li>
+                        ${ytHtml ? `<li><a href="#"><span class="tocnumber">5</span> <span class="toctext">Media</span></a></li>` : ''}
+                        <li><a href="#"><span class="tocnumber">${ytHtml ? '6' : '5'}</span> <span class="toctext">References</span></a></li>
                     </ul>
                 </div>
 
                 <h2><span class="mw-headline">Early life and career</span></h2>
                 ${formattedBio}
                 
+                <h2><span class="mw-headline">Public image and influence</span></h2>
+                <p>In recent years, <b>${res.full_name}</b> has cultivated a significant presence both professionally and digitally. Their journey reflects a blend of traditional expertise and modern digital adaptability, making them a subject of interest for peers and emerging professionals alike.<sup class="reference"><a href="#">[3]</a></sup></p>
+                
+                <table class="cquote" style="margin: 20px auto; border-collapse: collapse; background: transparent; width: 90%; max-width: 600px;">
+                    <tr>
+                        <td style="color: #b2b7f2; font-size: 50px; font-family: 'Times New Roman', serif; font-weight: bold; text-align: left; padding: 10px; vertical-align: top; line-height: 0.5;">“</td>
+                        <td style="padding: 15px; font-size: 1.15em; font-style: italic; text-align: center; vertical-align: middle; color: #333;">Success is not just about reaching the top, but about the digital footprint and legacy you leave behind for others to follow.</td>
+                        <td style="color: #b2b7f2; font-size: 50px; font-family: 'Times New Roman', serif; font-weight: bold; text-align: right; padding: 10px; vertical-align: bottom; line-height: 0.5;">”</td>
+                    </tr>
+                    <tr><td colspan="3" style="text-align: right; padding-right: 5%; font-size: 0.9em; font-weight: bold;">— ${res.full_name}</td></tr>
+                </table>
+                
+                <p>Industry observers have frequently noted their ability to connect with audiences and deliver consistent results. As digital platforms become the primary medium for professional networking, their strategic utilization of these tools has further cemented their status as a forward-thinking individual.<sup class="reference"><a href="#">[4]</a></sup></p>
+
+                <h2><span class="mw-headline">Career milestones</span></h2>
+                <p>The trajectory of <b>${res.full_name}</b>'s career is marked by continuous learning and adaptation. From the early days of their professional journey to their current standing, they have demonstrated a remarkable commitment to excellence.</p>
+                
+                <table style="width:100%; margin: 1.5em 0; background-color: #f8f9fa; border: 1px solid #a2a9b1; border-collapse: collapse;">
+                    <tbody>
+                        <tr style="background-color: #eaecf0;"><th style="padding:10px; border: 1px solid #a2a9b1; text-align:left;">Phase</th><th style="padding:10px; border: 1px solid #a2a9b1; text-align:left;">Focus Area</th><th style="padding:10px; border: 1px solid #a2a9b1; text-align:left;">Impact</th></tr>
+                        <tr><td style="padding:10px; border: 1px solid #a2a9b1;">Early Foundation</td><td style="padding:10px; border: 1px solid #a2a9b1;">Skill Development & Education</td><td style="padding:10px; border: 1px solid #a2a9b1;">Built a strong core understanding of the industry.</td></tr>
+                        <tr><td style="padding:10px; border: 1px solid #a2a9b1;">Professional Growth</td><td style="padding:10px; border: 1px solid #a2a9b1;">Networking & Execution</td><td style="padding:10px; border: 1px solid #a2a9b1;">Expanded reach and established a credible reputation.</td></tr>
+                        <tr><td style="padding:10px; border: 1px solid #a2a9b1;">Digital Era</td><td style="padding:10px; border: 1px solid #a2a9b1;">Brand Building & Outreach</td><td style="padding:10px; border: 1px solid #a2a9b1;">Achieved notable recognition as a public figure.</td></tr>
+                    </tbody>
+                </table>
+
+                <h2><span class="mw-headline">Legacy and recognition</span></h2>
+                <p>Today, the name <b>${res.full_name}</b> stands as a testament to what can be achieved through dedication and a clear vision. As they continue to navigate the complexities of their industry, their story serves as an inspiration to many. Whether through direct professional contributions or their expanding digital footprint, they are undoubtedly a prominent figure to watch in the coming years.<sup class="reference"><a href="#">[5]</a></sup></p>
+
                 ${ytHtml ? `<h2><span class="mw-headline">Media</span></h2>${ytHtml}` : ''}
                 
                 <div style="clear:both;"></div>
